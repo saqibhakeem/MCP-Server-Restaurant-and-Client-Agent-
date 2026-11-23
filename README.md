@@ -37,42 +37,42 @@ The system bridges conversational AI with deterministic business logic and file-
 
 ```mermaid
 flowchart TD
-    subgraph User Interaction
-        U[User CLI / Prompt]
+    subgraph Sub_User ["User Interaction"]
+        U["User CLI / Prompt"]
     end
 
-    subgraph Autonomous AI Agent (agent.py)
-        A[GroqMCPAgent]
-        LLM[Groq LLM / Chat Completions]
-        TC[Tool Schema Transformer & Dispatcher]
+    subgraph Sub_Agent ["Autonomous AI Agent (agent.py)"]
+        A["GroqMCPAgent"]
+        LLM["Groq LLM / Chat Completions"]
+        TC["Tool Schema Transformer & Dispatcher"]
     end
 
-    subgraph Direct Client (client.py)
-        C[MCP ClientSession / SSE Client]
+    subgraph Sub_Client ["Direct Client (client.py)"]
+        C["MCP ClientSession / SSE Client"]
     end
 
-    subgraph MCP Transport Layer
+    subgraph Sub_Transport ["MCP Transport Layer"]
         direction TB
-        T1[Streamable HTTP / MCP POST]
-        T2[Server-Sent Events / SSE]
+        T1["Streamable HTTP / MCP POST"]
+        T2["Server-Sent Events / SSE"]
     end
 
-    subgraph Restaurant MCP Server (server.py)
-        S[MCPServer: RestaurantService]
-        subgraph Tools
-            T_Info[get_restaurant_info]
-            T_Menu[get_menu]
-            T_Avail[check_available_tables]
-            T_Book[book_table]
-            T_Det[get_booking_details]
-            T_Cancel[cancel_booking]
+    subgraph Sub_Server ["Restaurant MCP Server (server.py)"]
+        S["MCPServer: RestaurantService"]
+        subgraph Sub_Tools ["Tools"]
+            T_Info["get_restaurant_info"]
+            T_Menu["get_menu"]
+            T_Avail["check_available_tables"]
+            T_Book["book_table"]
+            T_Det["get_booking_details"]
+            T_Cancel["cancel_booking"]
         end
     end
 
-    subgraph Persistence Layer (JSON)
-        D_Menu[(menu.json)]
-        D_Tables[(tables.json)]
-        D_Bookings[(bookings.json)]
+    subgraph Sub_Storage ["Persistence Layer (JSON)"]
+        D_Menu[("menu.json")]
+        D_Tables[("tables.json")]
+        D_Bookings[("bookings.json")]
     end
 
     U --> A
@@ -82,10 +82,10 @@ flowchart TD
     C --> T2
     T1 --> S
     T2 --> S
-    S --> Tools
-    Tools <--> D_Menu
-    Tools <--> D_Tables
-    Tools <--> D_Bookings
+    S --> Sub_Tools
+    Sub_Tools <--> D_Menu
+    Sub_Tools <--> D_Tables
+    Sub_Tools <--> D_Bookings
 ```
 
 ---
@@ -98,7 +98,7 @@ flowchart TD
   - `sse`: Traditional Server-Sent Events transport.
 - **Dynamic Tool Schema Translation**: Automatically maps MCP JSON schemas (`inputSchema`) to OpenAI/Groq function calling format.
 - **Multi-Server Aggregation**: The AI agent can connect to multiple MCP servers concurrently (e.g. local and remote ngrok endpoints) and dispatch commands to the corresponding server session.
-- **Autonomous Tool-Calling Loop**: Handles chained tool executions (e.g., checking restaurant hours $\rightarrow$ filtering vegetarian dishes $\rightarrow$ checking available tables $\rightarrow$ confirming booking).
+- **Autonomous Tool-Calling Loop**: Handles chained tool executions (e.g., checking restaurant hours → filtering vegetarian dishes → checking available tables → confirming booking).
 - **Lightweight File-Based Persistence**: Zero database configuration needed; records are persisted with auto-generated identifiers in JSON format.
 
 ---
@@ -242,11 +242,11 @@ python agent.py --servers http://localhost:8000/mcp --model openai/gpt-oss-120b
 **Example 1: Menu Consultation & Dietary Filtering**
 > **User:** What vegetarian options do you have for dinner?  
 > **Agent:** *(Calls `get_menu(category="main", dietary_tag="vegetarian")`)*  
-> We have the **Wild Mushroom Tagliatelle** ($24.00), made with handmade pasta, porchini, chanterelles, and aged parmesan. We also have **Truffle Arancini** ($14.50) as an appetizer and **Dark Chocolate Fondant** ($11.00) for dessert!
+> We have the **Wild Mushroom Tagliatelle** (\$24.00), made with handmade pasta, porchini, chanterelles, and aged parmesan. We also have **Truffle Arancini** (\$14.50) as an appetizer and **Dark Chocolate Fondant** (\$11.00) for dessert!
 
 **Example 2: Table Availability & Booking**
 > **User:** I want to book a table for 4 people on 2026-11-20 at 19:30. My name is Alex, phone is 555-0144.  
-> **Agent:** *(Calls `check_available_tables` $\rightarrow$ `book_table`)*  
+> **Agent:** *(Calls `check_available_tables` → `book_table`)*  
 > Your table has been reserved successfully!  
 > - **Booking ID:** `BK-3F12A8`  
 > - **Name:** Alex  
