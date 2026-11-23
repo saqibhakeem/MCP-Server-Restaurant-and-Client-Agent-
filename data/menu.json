@@ -1,0 +1,47 @@
+[
+  {
+    "id": "M01",
+    "name": "Truffle Arancini",
+    "category": "appetizer",
+    "price": 14.50,
+    "description": "Crispy risotto balls filled with wild mushrooms and truffle aioli.",
+    "dietary": ["vegetarian"],
+    "available": true
+  },
+  {
+    "id": "M02",
+    "name": "Pan-Seared Sea Bass",
+    "category": "main",
+    "price": 32.00,
+    "description": "Wild sea bass served over crushed herb potatoes with lemon butter emulsion.",
+    "dietary": ["gluten-free"],
+    "available": true
+  },
+  {
+    "id": "M03",
+    "name": "Ribeye Steak 10oz",
+    "category": "main",
+    "price": 38.00,
+    "description": "Grass-fed ribeye with garlic herb butter and rosemary roasted fries.",
+    "dietary": ["gluten-free"],
+    "available": true
+  },
+  {
+    "id": "M04",
+    "name": "Wild Mushroom Tagliatelle",
+    "category": "main",
+    "price": 24.00,
+    "description": "Handmade pasta with porchini, chanterelles, and aged parmesan.",
+    "dietary": ["vegetarian"],
+    "available": true
+  },
+  {
+    "id": "M05",
+    "name": "Dark Chocolate Fondant",
+    "category": "dessert",
+    "price": 11.00,
+    "description": "Warm molten cake served with Madagascar vanilla gelato.",
+    "dietary": ["vegetarian"],
+    "available": true
+  }
+]
